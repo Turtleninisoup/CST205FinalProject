@@ -18,7 +18,6 @@ class RecipeSearchTerm(FlaskForm):
         validators=[DataRequired()]
     )
 
-search_term = []
 recipes = []
 matched_recipes = []
 
@@ -40,7 +39,7 @@ def preprocess():
     #     print(recipe)
     #     sys.stdout.flush()
 
-def search_for_recipe_matches(): 
+def search_for_recipe_matches(search_term): 
     print(search_term)
     # sys.stdout.flush()
     for word in search_term: 
@@ -58,11 +57,13 @@ def index():
     preprocess()
     form = RecipeSearchTerm()
     if form.validate_on_submit():
-        store_search_term(form.search_term.data)
+        search_term = store_search_term(form.search_term.data)
+        print("SEARCH TERM = ", search_term)
+        sys.stdout.flush()
+        search_for_recipe_matches(search_term)
         return redirect('/result')
     return render_template('index.html', form=form)
 
 @app.route('/result')
 def vp():
-    search_for_recipe_matches()
     return render_template('result.html')
