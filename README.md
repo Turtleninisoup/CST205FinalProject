@@ -69,7 +69,7 @@ A user will type a recipe name in the search bar then be directed to a page with
   * None mode 
   * Thumbnail mode 
   * Use color maps? 
-  * *Stretch Goals
+  * *Stretch Goals*
   * User is able to search by user
 
 * 4. What are the milestones for the project? 
