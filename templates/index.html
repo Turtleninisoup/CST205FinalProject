@@ -18,8 +18,8 @@
           <h2 class="card-title">Search for recipes!</h2>
           <form method="POST" action="/">
             {{ form.csrf_token }}
-            {{ form.song_title.label }} 
-            {{ form.song_title(size=32) }}
+            {{ form.search_term.label }} 
+            {{ form.search_term(size=32) }}
             <input type="submit" value="Submit">
           </form>
         </div>
