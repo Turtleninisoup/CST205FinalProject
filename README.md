@@ -7,6 +7,7 @@
 **What are we going to build?**
 **What is the mission of your product?**
 **What is the purpose of your product?**
+
 The purpose of this product is to build a web application that will allow us to search for recipes from a blog called TasteSpotting. 
 **What is the need? What is your solution?**
 While the blog already has a search functionality, we plan on implementing our own to demonstrate what we learned in class. Furthermore, we can use the data we web scraped from the site to display the search results in various image modes. 
