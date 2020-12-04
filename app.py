@@ -11,7 +11,7 @@ bootstrap = Bootstrap(app)
 
 class Playlist(FlaskForm):
     song_title = StringField(
-        'Song Title', 
+        'Keyword', 
         validators=[DataRequired()]
     )
 
@@ -31,6 +31,6 @@ def index():
         return redirect('/view_playlist')
     return render_template('index.html', form=form)
 
-@app.route('/view_playlist')
-def vp():
-    return render_template('vp.html', playlist=playlist)
+# @app.route('/view_playlist')
+# def vp():
+#     return render_template('vp.html', playlist=playlist)
