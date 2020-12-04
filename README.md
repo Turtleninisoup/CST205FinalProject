@@ -9,6 +9,7 @@
 **What is the purpose of your product?**
 
 The purpose of this product is to build a web application that will allow us to search for recipes from a blog called TasteSpotting. 
+
 **What is the need? What is your solution?**
 
 While the blog already has a search functionality, we plan on implementing our own to demonstrate what we learned in class. Furthermore, we can use the data we web scraped from the site to display the search results in various image modes. 
@@ -17,9 +18,11 @@ Our solution is to build a web application.
 **Who is your target audience?**
 
 Anyone.
+
 **Who will your users be?**
 
 Those who are just learning how to cook. 
+
 **How will your product serve these people?**
 
 Increases accessibility for new learners. 
@@ -28,6 +31,7 @@ Increases accessibility for new learners.
 **What are the design features?**
 
 Website access using Flask
+
 **What kind of features will this product have to meet needs of the audience?**
 
 Different modification to images that will be displayed 
@@ -37,6 +41,7 @@ Different modification to images that will be displayed
 **What will the users see when they open your application?**
 
 A user would see a search bar 
+
 **What are the steps that users will go through to use your product?**
 
 A user will type a recipe name in the search bar then be directed to a page with the recipe information from TasteSpotting.com 
