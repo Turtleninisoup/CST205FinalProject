@@ -32,12 +32,13 @@ def store_search_term(token):
 def preprocess(): 
     for recipe in website_recipe_info: 
         recipes.append({})
+        recipes[-1]['title'] = recipe['title']
         recipes[-1]['recipe_url'] = recipe['recipe_url']
         recipes[-1]['tags'] = recipe['tags'].lower().split()
         recipes[-1]['image_url'] = recipe['image_url']
-    # for recipe in recipes: 
-    #     print(recipe)
-    #     sys.stdout.flush()
+    for recipe in recipes: 
+        print(recipe)
+        sys.stdout.flush()
 
 def search_for_recipe_matches(search_term): 
     print(search_term)
