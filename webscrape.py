@@ -22,10 +22,15 @@ for recipe_card in website_soup.find_all('div', 'trendspotted-item'):
     recipe_card_count = recipe_card_count - 1
     website_recipe_file.write("\t{\n")
 
+    # adding a title for ease
+    website_recipe_file.write("\t\t\"title\" : ")
+    website_recipe_file.write("\"image_" + str(recipe_card_count) + "\"")
+    website_recipe_file.write(",\n")
+
     recipe_text = str(recipe_card.find('h3'))
 
     #print(recipe_card)
-    print(recipe_text)
+    #print(recipe_text)
 
     # locating where the first link is at for
     # the recipe URL
