@@ -36,17 +36,27 @@ class MyWindow(QWidget):
         #Open Sawyer image
         im = Image.open('Sawyer.jpg')
 
-        # Checks to see what is in the combo box to apply filter
         if my_text == "Sepia":
-            sepia_list = map(map_sepia, im.getdata())
-            im.putdata(list(sepia_list))
+            
+            sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
+                for pixel in im.getdata()]
+            im.putdata(sepia_list)
+
+            ##############
+            #def map_sepia(pixel):
+            #    return (pixel[0], pixel[1]//2, pixel[2]//2)
+            #
+            #new_list = map(map_sepia, im.getdata())
+            ###############
         if my_text == "Negative":
-            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2])
-                             for p in im.getdata()]
+            negative_list = [(p[0], 255 - p[1], 255 - p[2])
+                for p in im.getdata()]
             im.putdata(negative_list)
-        if my_text == "GrayScale":
-            grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
-                  for a in im.getdata() ]
+        if my_text == "Grayscale":
+            #grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
+            #      for a in im.getdata() ]
+            grayscale_list = [(255 - a[0], 255 - a[0], 255 - a[0])
+                for a in im.getdata()]
             im.putdata(grayscale_list)
         #if my_text == "Thumbnail":
             
