@@ -34,7 +34,8 @@ class MyWindow(QWidget):
         self.my_label.setText(f'You chose {self.my_list[my_index]}.')        
 
         #Open Sawyer image
-        im = Image.open('Sawyer.jpg')
+        print(my_text)
+        im = Image.open('SawyerOG.jpg')
 
         if my_text == "Sepia":
             
@@ -49,14 +50,14 @@ class MyWindow(QWidget):
             #new_list = map(map_sepia, im.getdata())
             ###############
         if my_text == "Negative":
-            negative_list = [(p[0], 255 - p[1], 255 - p[2])
+            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2])
                 for p in im.getdata()]
             im.putdata(negative_list)
         if my_text == "Grayscale":
-            #grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
-            #      for a in im.getdata() ]
-            grayscale_list = [(255 - a[0], 255 - a[0], 255 - a[0])
-                for a in im.getdata()]
+            grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
+                  for a in im.getdata() ]
+            #grayscale_list = [(255 - a[0], 255 - a[0], 255 - a[0])
+            #    for a in im.getdata()]
             im.putdata(grayscale_list)
         #if my_text == "Thumbnail":
             
@@ -74,7 +75,7 @@ def map_neg(pixel):
         new_data.append((255-p[0], 255-p[1], 255-p[2]))
 
     im.putdata(new_data)
-    im.save('Sawyer.jpg')
+    im.save('SawyerNeg.jpg')
 #End Negative code
 
 
