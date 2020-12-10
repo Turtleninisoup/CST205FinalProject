@@ -3,10 +3,9 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-from datetime import datetime
 from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
-import sys
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'csumb-otter'
