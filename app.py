@@ -37,7 +37,7 @@ def preprocess():
 
 def search_for_recipe_matches(search_term): 
     # empty array so recipes that matched previous search term aren't included
-    matched_recipes = []
+    matched_recipes.clear()
     # used to check if a recipe has already been added into matched_recipes
     already_matched_recipe_titles = []
 
@@ -61,6 +61,7 @@ def index():
     if form.validate_on_submit():
         search_term = store_search_term(form.search_term.data)
         search_for_recipe_matches(search_term)
+        pprint(matched_recipes)
         return redirect('/result')
     return render_template('index.html', form=form)
 
