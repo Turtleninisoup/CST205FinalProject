@@ -1,0 +1,41 @@
+<!-- 
+    Class: CST205 
+    Author:Deborah Meda
+    Date: Dec 11, 2020
+    Description: This template displays recipes by search term -->
+
+    <!doctype html>
+    <html lang="en">
+        <head>
+            {% block head %}
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            {% block styles %}
+                {{ bootstrap.load_css() }}
+            {% endblock %}
+            <div class="container mb-4" style="margin-top: 50px; text-align: center">
+                <h1 style="font-family: Qualion,Lato,helvetica,sans-serif;">RECIPES</h1>
+            </div>
+            {% endblock %}
+        </head>
+        <body>
+            {% block content %}
+            <div class="container mb-4">
+            <ul class="list-group" style="list-style-type: none">
+                {% for item in matched_recipes %}
+                <div class="list-group-item">
+                    <li ><a href="{{ item.recipe_url }}"><img src="{{ item.image_url }}"></a></li>
+                    <li ><a href="{{ item.recipe_url }}" 
+                        style="text-decoration-line: none; font-family: Qualion,Lato,helvetica,sans-serif; font-size: 18px;">
+                        {{ item.tags|join(' ')|capitalize }}</a></li>
+                </div>
+                {% endfor %}
+            </ul>
+            <br>
+                <a href="{{ url_for('index') }}" style="text-decoration-line: none; font-family: Qualion,Lato,helvetica,sans-serif;">
+                    Back to Search Bar</a>
+                {{ bootstrap.load_js() }}
+            </div>
+            {% endblock %}
+        </body>
+    </html>
