@@ -15,7 +15,7 @@ class MyWindow(QWidget):
     def __init__(self):
         super().__init__()
         
-        self.my_list = ["Pick a manipulation", "Sepia", "Grayscale", "Negative", "Thumbnail", "None"]
+        self.my_list = ["Pick a manipulation", "Sepia", "Grayscale", "Negative", "Thumbnail", "None", "Winter"]
         self.my_combo_box = QComboBox()
         self.my_combo_box.addItems(self.my_list)
         self.my_label = QLabel("")
@@ -42,26 +42,51 @@ class MyWindow(QWidget):
             sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
                 for pixel in im.getdata()]
             im.putdata(sepia_list)
-
+            im.show()
             ##############
             #def map_sepia(pixel):
             #    return (pixel[0], pixel[1]//2, pixel[2]//2)
             #
             #new_list = map(map_sepia, im.getdata())
             ###############
-        if my_text == "Negative":
-            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2])
-                for p in im.getdata()]
-            im.putdata(negative_list)
         if my_text == "Grayscale":
             grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
                   for a in im.getdata() ]
             #grayscale_list = [(255 - a[0], 255 - a[0], 255 - a[0])
             #    for a in im.getdata()]
             im.putdata(grayscale_list)
-        #if my_text == "Thumbnail":
+            im.show()
+        if my_text == "Negative":
+            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2])
+                for p in im.getdata()]
+            im.putdata(negative_list)
+            im.show()
+        if my_text == "Thumbnail":
+            source = Image.open('SawyerOG.jpg')
+
+            w,h = source.width, source.height
+
+            target = Image.new('RGB', (w, h), 'rosybrown')
+
+            target_x = 0
+            for source_x in range(0, source.width, 2):
+                target_y = 0
+                for source_y in range(0, source.height, 2):
+                    pixel = source.getpixel((source_x, source_y))
+                    target.putpixel((target_x, target_y), pixel)
+                    target_y += 1
+                target_x += 1
+
+            target.show('SawyerOG-Smaller.jpg')
             
-        im.show()
+        if my_text == "None":
+            im.show()
+        if my_text == "Winter":
+            def map_red(pixel):
+                return (pixel[0], pixel[1], pixel[2]*2)
+            new_list = map(map_red, im.getdata())
+            im.putdata(list(new_list))
+            im.show()
 
 
 #Negative code
