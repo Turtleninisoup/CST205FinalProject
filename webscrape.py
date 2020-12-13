@@ -38,6 +38,8 @@ for recipe_card in website_soup.find_all('div', 'trendspotted-item'):
     target_index = recipe_text.index("target")
     n = target_index - 2
     recipe_url = recipe_text[i:n]
+    target_index = recipe_url.index("&amp")
+    recipe_url = recipe_url[:target_index]
     website_recipe_file.write("\t\t\"recipe_url\" : ")
     website_recipe_file.write("\"" + recipe_url + "\"")
     website_recipe_file.write(",\n")
