@@ -67,4 +67,4 @@ def index():
 
 @app.route('/result')
 def vp():
-    return render_template('result.html')
+    return render_template('result.html', matched_recipes=matched_recipes)
