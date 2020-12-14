@@ -65,6 +65,23 @@ def search_for_recipe_matches(search_term):
                     matched_recipes[-1]['tags'] = recipe['tags']
                     matched_recipes[-1]['image_url'] = recipe['image_url']
 
+def apply_grayscale(image_name, matched_recipes, recipe_title, index): 
+    im = Image.open(image_name)
+    grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
+                  for a in im.getdata() ]
+    im.putdata(grayscale_list)
+    im.show("static/images/grayscale/" + recipe_title + ".jpg")
+    im.save("static/images/grayscale/" + recipe_title + ".jpg")
+    # matched_recipes[index]["image_url"] = "static/images/filter/" + recipe_title + ".jpg"
+
+def apply_negative(image_name, matched_recipes, recipe_title, index): 
+    im = Image.open(image_name)
+    negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
+    im.putdata(negative_list)
+    im.save("static/images/negative/" + recipe_title + ".jpg")
+    # matched_recipes[index]["image_url"] = "static/images/filter/" + recipe_title + ".jpg"
+
+
 def apply_filter(image_filter):
     # Deleting old files
     shutil.rmtree(r"static/images/filter")
@@ -85,53 +102,58 @@ def apply_filter(image_filter):
         im = Image.open(image_name)
         print("Line 76" + image_filter)
         if image_filter == "grayscale":
-            grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
-                  for a in im.getdata() ]
-            im.putdata(grayscale_list)
-            im.save("static/images/filter/" + recipe["title"] + ".jpg")
+            apply_grayscale(image_name, matched_recipes, recipe['title'], i)
         
         if image_filter == "negative":
-            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
-            im.putdata(negative_list)
-            im.save("static/images/filter/" + recipe["title"] + ".jpg")
+            apply_negative(image_name, matched_recipes, recipe['title'], i)
+            # negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
+            # im.putdata(negative_list)
+            # im.save("static/images/filter/" + recipe["title"] + ".jpg")
 
-        if image_filter == "sephia":
-            sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
-                for pixel in im.getdata()]
-            im.putdata(sepia_list)
-            im.save("static/images/filter/" + recipe["title"] + ".jpg")
+        # if image_filter == "sephia":
+        #     sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
+        #         for pixel in im.getdata()]
+        #     im.putdata(sepia_list)
+        #     im.save("static/images/filter/" + recipe["title"] + ".jpg")
 
-        if image_filter == "winter":
-            image_winter = cv2.imread(
-                image_name,
-                cv2.IMREAD_GRAYSCALE
-            )
-            image_remap = cv2.applyColorMap(
-                image_winter,
-                cv2.COLORMAP_WINTER
-            )
-            cv2.imwrite("static/images/filter/" + recipe["title"] + ".jpg", image_remap)
-            #cv2.save("static/images/filter/" + recipe["title"] + ".jpg", im)
+        # if image_filter == "winter":
+        #     image_winter = cv2.imread(
+        #         image_name,
+        #         cv2.IMREAD_GRAYSCALE
+        #     )
+        #     image_remap = cv2.applyColorMap(
+        #         image_winter,
+        #         cv2.COLORMAP_WINTER
+        #     )
+        #     cv2.imwrite("static/images/filter/" + recipe["title"] + ".jpg", image_remap)
+        #     #cv2.save("static/images/filter/" + recipe["title"] + ".jpg", im)
 
-        if image_filter == "thumbnail":
-            source = Image.open(image_name)
-            w,h = source.width, source.height
-            target = Image.new('RGB', (w, h), 'rosybrown')
+        # if image_filter == "thumbnail":
+        #     source = Image.open(image_name)
+        #     w,h = source.width, source.height
+        #     target = Image.new('RGB', (w, h), 'rosybrown')
 
-            target_x = 0
-            for source_x in range(0, source.width, 2):
-                target_y = 0
-                for source_y in range(0, source.height, 2):
-                    pixel = source.getpixel((source_x, source_y))
-                    target.putpixel((target_x, target_y), pixel)
-                    target_y += 1
-                target_x += 1
-            target.save("static/images/filter/" + recipe["title"] + ".jpg")
+        #     target_x = 0
+        #     for source_x in range(0, source.width, 2):
+        #         target_y = 0
+        #         for source_y in range(0, source.height, 2):
+        #             pixel = source.getpixel((source_x, source_y))
+        #             target.putpixel((target_x, target_y), pixel)
+        #             target_y += 1
+        #         target_x += 1
+        #     target.save("static/images/filter/" + recipe["title"] + ".jpg")
 
 
-        #im.save("static/images/filter/" + recipe["title"] + ".jpg")
-        matched_recipes[i]["image_url"] = "static/images/filter/" + recipe["title"] + ".jpg"
+        # #im.save("static/images/filter/" + recipe["title"] + ".jpg")
+        # matched_recipes[i]["image_url"] = "static/images/filter/" + recipe["title"] + ".jpg"
         i += 1
+
+
+# this will be run once to create the filter images
+def create_filter_images(): 
+
+
+
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
@@ -142,12 +164,15 @@ def index():
         image_filter = form.image_format.data
         print(image_filter)
         search_for_recipe_matches(search_term)
-        pprint(matched_recipes)
+        # pprint(matched_recipes)
 
         apply_filter(image_filter)
+
+        # pprint(matched_recipes)
         return redirect('/result')
     return render_template('index.html', form=form)
 
 @app.route('/result')
 def vp():
+    pprint(matched_recipes)
     return render_template('result.html', matched_recipes=matched_recipes)
