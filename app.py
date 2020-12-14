@@ -68,6 +68,10 @@ def apply_filter(image_filter):
     # Deleting old files
     shutil.rmtree(r"static/images/filter")
     os.mkdir(r"static/images/filter")
+
+    # Index to index into matched recipes :3c
+    i = 0
+
     # This will save our images to our directory
     for recipe in matched_recipes:
         print("inside of matched_recipes loop")
@@ -84,6 +88,8 @@ def apply_filter(image_filter):
                   for a in im.getdata() ]
             im.putdata(grayscale_list)
             im.save("static/images/filter/" + recipe["title"] + ".jpg")
+            matched_recipes[i]["image_url"] = "static/images/filter/" + recipe["title"] + ".jpg"
+        i += 1
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
