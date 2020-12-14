@@ -8,6 +8,8 @@ from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
 import urllib.request       # for saving images
 from PIL import Image
+import os
+import shutil
 
 # Citation
 # https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
@@ -63,6 +65,9 @@ def search_for_recipe_matches(search_term):
                     matched_recipes[-1]['image_url'] = recipe['image_url']
 
 def apply_filter(image_filter):
+    # Deleting old files
+    shutil.rmtree(r"static/images/filter")
+    os.mkdir(r"static/images/filter")
     # This will save our images to our directory
     for recipe in matched_recipes:
         print("inside of matched_recipes loop")
@@ -78,7 +83,7 @@ def apply_filter(image_filter):
             grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
                   for a in im.getdata() ]
             im.putdata(grayscale_list)
-            im.show()
+            im.save("static/images/filter/" + recipe["title"] + ".jpg")
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
