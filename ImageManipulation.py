@@ -8,6 +8,9 @@ from PySide2.QtCore import Slot
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, url_for
 
+import numpy as np
+import cv2
+
 from pprint import pprint
 from PIL import Image
 
@@ -81,40 +84,52 @@ class MyWindow(QWidget):
             
         if my_text == "None":
             im.show()
+
         if my_text == "Winter":
-            def map_red(pixel):
-                return (pixel[0], pixel[1], pixel[2]*2)
-            new_list = map(map_red, im.getdata())
-            im.putdata(list(new_list))
-            im.show()
+            image_winter = cv2.imread(
+                'SawyerOG.jpg',
+                cv2.IMREAD_GRAYSCALE
+            )
+            image_remap = cv2.applyColorMap(
+                image_winter,
+                cv2.COLORMAP_WINTER
+            )
+            cv2.imshow("Image in Winter", image_remap)
+            cv2.waitKey()
+
+            # def map_red(pixel):
+            #     return (pixel[0], pixel[1], pixel[2]*2)
+            # new_list = map(map_red, im.getdata())
+            # im.putdata(list(new_list))
+            # im.show()
 
 
 #Negative code
-def map_neg(pixel):
-    im = Image.open('Sawyer.jpg')
+# def map_neg(pixel):
+#     im = Image.open('Sawyer.jpg')
 
-    orig_data = im.getdata()
-    new_data = [ ]
+#     orig_data = im.getdata()
+#     new_data = [ ]
 
-    for p in orig_data:
-        new_data.append((255-p[0], 255-p[1], 255-p[2]))
+#     for p in orig_data:
+#         new_data.append((255-p[0], 255-p[1], 255-p[2]))
 
-    im.putdata(new_data)
-    im.save('SawyerNeg.jpg')
+#     im.putdata(new_data)
+#     im.save('SawyerNeg.jpg')
 #End Negative code
 
 
 #Sepia
-def map_sepia(pixel):
-    if pixel[0] < 63:
-        r,g,b = int(pixel[0]*1.1), pixel[1], int(pixel[2]*.9)
-    elif pixel[0]>62 and pixel[0]<192:
-        r,g,b = int(pixel[0]*1.15), pixel[1], int(pixel[2]*.85)
-    else:
-        r = int(pixel[0]*1.08)
-        if r>255: r=255
-        g,b = pixel[1], pixel[2]//2
-    return r,g,b
+# def map_sepia(pixel):
+#     if pixel[0] < 63:
+#         r,g,b = int(pixel[0]*1.1), pixel[1], int(pixel[2]*.9)
+#     elif pixel[0]>62 and pixel[0]<192:
+#         r,g,b = int(pixel[0]*1.15), pixel[1], int(pixel[2]*.85)
+#     else:
+#         r = int(pixel[0]*1.08)
+#         if r>255: r=255
+#         g,b = pixel[1], pixel[2]//2
+#     return r,g,b
 
 #new_list = map(map_sepia, im.getdata())
 #End sepia
