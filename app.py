@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, flash, redirect
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -5,7 +6,10 @@ from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
+import urllib.request       # for saving images
 
+# Citation
+# https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'csumb-otter'
@@ -21,6 +25,7 @@ class RecipeSearchTerm(FlaskForm):
 
 recipes = []
 matched_recipes = []
+image_filter = "none"
 
 # split search term into separate words and convert words to lower case
 def store_search_term(token):
@@ -62,10 +67,20 @@ def index():
     form = RecipeSearchTerm()
     if form.validate_on_submit():
         search_term = store_search_term(form.search_term.data)
-        image_format = form.image_format.data
-        print(image_format)
+        image_filter = form.image_format.data
+        print(image_filter)
         search_for_recipe_matches(search_term)
         pprint(matched_recipes)
+
+        # This will save our images to our directory
+        for recipe in matched_recipes:
+            print("inside of matched_recipes loop")
+            #print(recipe)
+            image_name = "static/images/" + recipe["title"] + ".jpg"
+            current_image_url = recipe["image_url"]
+            print(current_image_url)
+            # retreieve the image and save it
+            urllib.request.urlretrieve(current_image_url, image_name)
         return redirect('/result')
     return render_template('index.html', form=form)
 
