@@ -14,6 +14,10 @@ import cv2
 
 # Citation
 # https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
+# https://hackersandslackers.com/flask-wtforms-forms/
+# https://stackoverflow.com/questions/44055471/how-can-i-add-a-flask-wtforms-selectfield-to-my-html
+# https://datatofish.com/delete-file-folder-python/
+# https://www.geeksforgeeks.org/python-opencv-cv2-imwrite-method/
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'csumb-otter'
