@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired
 from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
 import urllib.request       # for saving images
+from PIL import Image
 
 # Citation
 # https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
@@ -61,6 +62,24 @@ def search_for_recipe_matches(search_term):
                     matched_recipes[-1]['tags'] = recipe['tags']
                     matched_recipes[-1]['image_url'] = recipe['image_url']
 
+def apply_filter(image_filter):
+    # This will save our images to our directory
+    for recipe in matched_recipes:
+        print("inside of matched_recipes loop")
+        #print(recipe)
+        image_name = "static/images/" + recipe["title"] + ".jpg"
+        current_image_url = recipe["image_url"]
+        print(current_image_url)
+        # retreieve the image and save it
+        urllib.request.urlretrieve(current_image_url, image_name)
+        im = Image.open(image_name)
+        print("Line 76" + image_filter)
+        if image_filter == "grayscale":
+            grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
+                  for a in im.getdata() ]
+            im.putdata(grayscale_list)
+            im.show()
+
 @app.route('/', methods=('GET', 'POST'))
 def index():
     preprocess()
@@ -72,15 +91,7 @@ def index():
         search_for_recipe_matches(search_term)
         pprint(matched_recipes)
 
-        # This will save our images to our directory
-        for recipe in matched_recipes:
-            print("inside of matched_recipes loop")
-            #print(recipe)
-            image_name = "static/images/" + recipe["title"] + ".jpg"
-            current_image_url = recipe["image_url"]
-            print(current_image_url)
-            # retreieve the image and save it
-            urllib.request.urlretrieve(current_image_url, image_name)
+        apply_filter(image_filter)
         return redirect('/result')
     return render_template('index.html', form=form)
 
