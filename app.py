@@ -10,6 +10,7 @@ import urllib.request       # for saving images
 from PIL import Image
 import os
 import shutil
+import cv2
 
 # Citation
 # https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
@@ -24,7 +25,7 @@ class RecipeSearchTerm(FlaskForm):
         validators=[DataRequired()]
     )
 
-    image_format = SelectField("Choose an option", choices=[("none", "None"), ("grayscale", "Grayscale"), ("negative", "Negative"), ("sephia", "Sephia")])
+    image_format = SelectField("Choose an option", choices=[("none", "None"), ("grayscale", "Grayscale"), ("negative", "Negative"), ("sephia", "Sephia"), ("thumbnail", "Thumbnail"), ("winter", "Winter")])
 
 recipes = []
 matched_recipes = []
@@ -88,7 +89,48 @@ def apply_filter(image_filter):
                   for a in im.getdata() ]
             im.putdata(grayscale_list)
             im.save("static/images/filter/" + recipe["title"] + ".jpg")
-            matched_recipes[i]["image_url"] = "static/images/filter/" + recipe["title"] + ".jpg"
+        
+        if image_filter == "negative":
+            negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
+            im.putdata(negative_list)
+            im.save("static/images/filter/" + recipe["title"] + ".jpg")
+
+        if image_filter == "sephia":
+            sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
+                for pixel in im.getdata()]
+            im.putdata(sepia_list)
+            im.save("static/images/filter/" + recipe["title"] + ".jpg")
+
+        if image_filter == "winter":
+            image_winter = cv2.imread(
+                image_name,
+                cv2.IMREAD_GRAYSCALE
+            )
+            image_remap = cv2.applyColorMap(
+                image_winter,
+                cv2.COLORMAP_WINTER
+            )
+            cv2.imwrite("static/images/filter/" + recipe["title"] + ".jpg", image_remap)
+            #cv2.save("static/images/filter/" + recipe["title"] + ".jpg", im)
+
+        if image_filter == "thumbnail":
+            source = Image.open(image_name)
+            w,h = source.width, source.height
+            target = Image.new('RGB', (w, h), 'rosybrown')
+
+            target_x = 0
+            for source_x in range(0, source.width, 2):
+                target_y = 0
+                for source_y in range(0, source.height, 2):
+                    pixel = source.getpixel((source_x, source_y))
+                    target.putpixel((target_x, target_y), pixel)
+                    target_y += 1
+                target_x += 1
+            target.save("static/images/filter/" + recipe["title"] + ".jpg")
+
+
+        #im.save("static/images/filter/" + recipe["title"] + ".jpg")
+        matched_recipes[i]["image_url"] = "static/images/filter/" + recipe["title"] + ".jpg"
         i += 1
 
 @app.route('/', methods=('GET', 'POST'))
