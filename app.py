@@ -1,7 +1,7 @@
 from flask import Flask, render_template, flash, redirect
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
@@ -16,6 +16,8 @@ class RecipeSearchTerm(FlaskForm):
         'Search Term', 
         validators=[DataRequired()]
     )
+
+    image_format = SelectField("Choose an option", choices=[("none", "None"), ("grayscale", "Grayscale"), ("negative", "Negative"), ("sephia", "Sephia")])
 
 recipes = []
 matched_recipes = []
@@ -60,6 +62,8 @@ def index():
     form = RecipeSearchTerm()
     if form.validate_on_submit():
         search_term = store_search_term(form.search_term.data)
+        image_format = form.image_format.data
+        print(image_format)
         search_for_recipe_matches(search_term)
         pprint(matched_recipes)
         return redirect('/result')
