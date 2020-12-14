@@ -7,7 +7,7 @@
       {% block styles %}
         {{ bootstrap.load_css() }}
       {% endblock %}
-      <title>CST 205 Playlist</title>
+      <title>CST 205 Final Project</title>
     {% endblock %}
   </head>
 <body>
@@ -20,6 +20,15 @@
             {{ form.csrf_token }}
             {{ form.search_term.label }} 
             {{ form.search_term(size=32) }}
+            {{ form.image_format.label }}
+            {{ form.image_format }}
+            <!--<label for="image-filter">Image Filters</label>
+            <select id="image-filter" name="image-filter">
+                <option value="none">{{ form.image_format.label }}</option>
+                <!--<option value="grayscale">Grayscale</option>
+                <option value="negative">Negative</option>
+                <option value="sephia">Sephia</option>
+            </select>-->
             <input type="submit" value="Submit">
           </form>
         </div>
