@@ -1,3 +1,5 @@
+# CST 205
+# Cathy Hsu, Christiana Libhart, Jaclyn Libhart, Deborah Meda, Charlie Nguyen
 #Image manipulation for webscraped imgs
 
 import sys
