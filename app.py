@@ -152,9 +152,6 @@ def create_filter_images():
         index += 1
         
 
-
-
-
 @app.route('/', methods=('GET', 'POST'))
 def index():
     preprocess()
@@ -164,13 +161,8 @@ def index():
         image_filter = form.image_format.data
         print(image_filter)
         search_for_recipe_matches(search_term)
-        
-        # pprint(matched_recipes)
-
-        create_filter_images()   
-        # apply_filter(image_filter)
-
-        # pprint(matched_recipes)
+        # create_filter_images()   
+        apply_filter(image_filter)
         return redirect('/result')
     return render_template('index.html', form=form)
 
