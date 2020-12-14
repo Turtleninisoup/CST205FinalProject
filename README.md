@@ -80,10 +80,7 @@ A user will type a recipe name in the search bar then be directed to a page with
   * Result page - Take all the information we get and display it on this page. Making sure all the url works correctly. 
   * Webscraping - Just researching and working with it will help us approach this 
 
-
-## Questions for Charlie to ask:
-Are we required to use an API? **No**
-Currently this is what we have, but we are worried it is not complicated enough. Do you have any suggestions on features or what else we could do? **Seems good?**
-
+## Mockup
+![Image of Mockup](static/final_mockup.png)
 
 ## Notes:  
