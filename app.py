@@ -1,3 +1,13 @@
+# CST 205
+# Cathy Hsu, Christiana Libhart, Jaclyn Libhart, Deborah Meda, Charlie Nguyen
+# This file, is the the main file for our CST 205 final project.
+#
+# Citation
+# https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
+# https://hackersandslackers.com/flask-wtforms-forms/
+# https://stackoverflow.com/questions/44055471/how-can-i-add-a-flask-wtforms-selectfield-to-my-html
+# https://datatofish.com/delete-file-folder-python/
+# https://www.geeksforgeeks.org/python-opencv-cv2-imwrite-method/
 
 from flask import Flask, render_template, flash, redirect
 from flask_bootstrap import Bootstrap
@@ -8,21 +18,16 @@ from webscrape_recipe_file import website_recipe_info
 from pprint import pprint
 import urllib.request       # for saving images
 from PIL import Image
-import os
-import shutil
 import cv2
+import webscrape                        # webscrape
 
-# Citation
-# https://stackoverflow.com/questions/21217475/get-selected-text-from-a-form-using-wtforms-selectfield
-# https://hackersandslackers.com/flask-wtforms-forms/
-# https://stackoverflow.com/questions/44055471/how-can-i-add-a-flask-wtforms-selectfield-to-my-html
-# https://datatofish.com/delete-file-folder-python/
-# https://www.geeksforgeeks.org/python-opencv-cv2-imwrite-method/
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'csumb-otter'
 bootstrap = Bootstrap(app)
 
+# Class is used to save the users search term and their image format.
 class RecipeSearchTerm(FlaskForm):
     search_term = StringField(
         'Search Term', 
@@ -31,9 +36,15 @@ class RecipeSearchTerm(FlaskForm):
 
     image_format = SelectField("Choose an option", choices=[("none", "None"), ("grayscale", "Grayscale"), ("negative", "Negative"), ("sephia", "Sephia"), ("thumbnail", "Thumbnail"), ("winter", "Winter")])
 
+# Instance Variables
 recipes = []
 matched_recipes = []
 image_filter = "none"
+
+# run webscrape file
+# We arent running this function at the moment, as all our data is already pulled
+def run_webscrape():
+    webscrape.webscrape_function()
 
 # split search term into separate words and convert words to lower case
 def store_search_term(token):
@@ -50,6 +61,7 @@ def preprocess():
         recipes[-1]['tags'] = recipe['tags'].lower().split()
         recipes[-1]['image_url'] = recipe['image_url']
 
+# This functions searches for recipes that matches a search term
 def search_for_recipe_matches(search_term): 
     # empty array so recipes that matched previous search term aren't included
     matched_recipes.clear()
@@ -69,6 +81,7 @@ def search_for_recipe_matches(search_term):
                     matched_recipes[-1]['tags'] = recipe['tags']
                     matched_recipes[-1]['image_url'] = recipe['image_url']
 
+# This function applies a gray scale filter on the specified image.
 def apply_grayscale(image_name, recipe_title): 
     im = Image.open(image_name)
     grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
@@ -76,14 +89,15 @@ def apply_grayscale(image_name, recipe_title):
     im.putdata(grayscale_list)
     im.save("static/images/grayscale/" + recipe_title + ".jpg")
 
-
+# This function applies a negative filter on the specified image.
 def apply_negative(image_name, recipe_title): 
     im = Image.open(image_name)
     negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
     im.putdata(negative_list)
     im.save("static/images/negative/" + recipe_title + ".jpg")
 
-
+# This function applies a thumbnail scale on the specified image.
+# The image will show a canvas color
 def apply_thumbnail(image_name, recipe_title):
     source = Image.open(image_name)
     w,h = source.width, source.height
@@ -99,6 +113,7 @@ def apply_thumbnail(image_name, recipe_title):
         target_x += 1
     target.save("static/images/thumbnail/" + recipe_title + ".jpg")
 
+# This function applies a sephia filter on the specified image.
 def apply_sephia(image_name, recipe_title): 
     im = Image.open(image_name)
     sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
@@ -106,12 +121,13 @@ def apply_sephia(image_name, recipe_title):
     im.putdata(sepia_list)
     im.save("static/images/sephia/" + recipe_title + ".jpg")
 
+# This function applies a winter filter (color map) on the specified image.
 def apply_winter(image_name, recipe_title): 
     image_winter = cv2.imread(image_name,cv2.IMREAD_GRAYSCALE)
     image_remap = cv2.applyColorMap(image_winter, cv2.COLORMAP_WINTER)
     cv2.imwrite("static/images/winter/" + recipe_title + ".jpg", image_remap)
 
-
+# This function encapsulates all the filters into one wrapper function for ease of use
 def apply_filter(image_filter):
     # Index to index into matched recipes :3c
     i = 0
@@ -155,11 +171,12 @@ def create_filter_images():
         apply_winter(image_name, recipe['title'])
         index += 1
         
-
+# Home route or landing page
 @app.route('/', methods=('GET', 'POST'))
 def index():
     preprocess()
     form = RecipeSearchTerm()
+    # when the user hits submit we will grab out the information we need
     if form.validate_on_submit():
         search_term = store_search_term(form.search_term.data)
         image_filter = form.image_format.data
@@ -170,6 +187,7 @@ def index():
         return redirect('/result')
     return render_template('index.html', form=form)
 
+# result route
 @app.route('/result')
 def vp():
     pprint(matched_recipes)
