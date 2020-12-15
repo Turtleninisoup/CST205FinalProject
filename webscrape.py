@@ -1,9 +1,10 @@
 # CST 205
-# Cathy Hsu, Christiana Libhart, Jaclyn Libhart, Deborah Meda, Charlie Nguyen
+# Charlie Nguyen
 # 12/4/20
 # need to pip install request
 # need to pip install BeatifulSoup4
 # This class allows us to webscrape data off of tastespotting.com
+# citation: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 
 import requests
 from bs4 import BeautifulSoup

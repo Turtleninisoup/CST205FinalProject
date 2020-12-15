@@ -8,6 +8,8 @@
 # https://stackoverflow.com/questions/44055471/how-can-i-add-a-flask-wtforms-selectfield-to-my-html
 # https://datatofish.com/delete-file-folder-python/
 # https://www.geeksforgeeks.org/python-opencv-cv2-imwrite-method/
+# https://discord.com/channels/778798502020513813/778798503408304141/788202133630877717
+#https://discord.com/channels/778798502020513813/778798503408304141/788202159614853150
 
 from flask import Flask, render_template, flash, redirect
 from flask_bootstrap import Bootstrap
@@ -43,15 +45,18 @@ image_filter = "none"
 
 # run webscrape file
 # We arent running this function at the moment, as all our data is already pulled
+# Charlie created
 def run_webscrape():
     webscrape.webscrape_function()
 
 # split search term into separate words and convert words to lower case
+# Cathy created
 def store_search_term(token):
     search_term = token.lower().split()
     return search_term
 
 # clean webscrape data
+# Cathy created
 def preprocess(): 
     for recipe in website_recipe_info: 
         recipes.append({})
@@ -62,6 +67,7 @@ def preprocess():
         recipes[-1]['image_url'] = recipe['image_url']
 
 # This functions searches for recipes that matches a search term
+# Cathy created
 def search_for_recipe_matches(search_term): 
     # empty array so recipes that matched previous search term aren't included
     matched_recipes.clear()
@@ -82,6 +88,7 @@ def search_for_recipe_matches(search_term):
                     matched_recipes[-1]['image_url'] = recipe['image_url']
 
 # This function applies a gray scale filter on the specified image.
+# Christiana and Jaclyn created
 def apply_grayscale(image_name, recipe_title): 
     im = Image.open(image_name)
     grayscale_list = [ ( (a[0]+a[1]+a[2])//3, ) * 3
@@ -90,6 +97,7 @@ def apply_grayscale(image_name, recipe_title):
     im.save("static/images/grayscale/" + recipe_title + ".jpg")
 
 # This function applies a negative filter on the specified image.
+# Christiana and Jaclyn created
 def apply_negative(image_name, recipe_title): 
     im = Image.open(image_name)
     negative_list = [(255 - p[0], 255 - p[1], 255 - p[2]) for p in im.getdata()]
@@ -98,6 +106,7 @@ def apply_negative(image_name, recipe_title):
 
 # This function applies a thumbnail scale on the specified image.
 # The image will show a canvas color
+# Christiana and Jaclyn created
 def apply_thumbnail(image_name, recipe_title):
     source = Image.open(image_name)
     w,h = source.width, source.height
@@ -114,6 +123,7 @@ def apply_thumbnail(image_name, recipe_title):
     target.save("static/images/thumbnail/" + recipe_title + ".jpg")
 
 # This function applies a sephia filter on the specified image.
+# Christiana and Jaclyn created
 def apply_sephia(image_name, recipe_title): 
     im = Image.open(image_name)
     sepia_list = [(255 + pixel[0], pixel[1], pixel[2])
@@ -122,12 +132,14 @@ def apply_sephia(image_name, recipe_title):
     im.save("static/images/sephia/" + recipe_title + ".jpg")
 
 # This function applies a winter filter (color map) on the specified image.
+# Christiana and Jaclyn created
 def apply_winter(image_name, recipe_title): 
     image_winter = cv2.imread(image_name,cv2.IMREAD_GRAYSCALE)
     image_remap = cv2.applyColorMap(image_winter, cv2.COLORMAP_WINTER)
     cv2.imwrite("static/images/winter/" + recipe_title + ".jpg", image_remap)
 
 # This function encapsulates all the filters into one wrapper function for ease of use
+# Cathy created
 def apply_filter(image_filter):
     # Index to index into matched recipes :3c
     i = 0
@@ -153,6 +165,7 @@ def apply_filter(image_filter):
 
 
 # this will be run once to save all the images in our directory the filter images
+# Cathy created
 def create_filter_images(): 
     index = 0 
     for recipe in recipes:
@@ -172,6 +185,7 @@ def create_filter_images():
         index += 1
         
 # Home route or landing page
+# Cathy created
 @app.route('/', methods=('GET', 'POST'))
 def index():
     preprocess()
@@ -188,6 +202,7 @@ def index():
     return render_template('index.html', form=form)
 
 # result route
+# Debbie created
 @app.route('/result')
 def vp():
     pprint(matched_recipes)
