@@ -1,6 +1,31 @@
 # CST205FinalProject
 
+**Project Name**: CST205FinalProject
 
+**Team Members**: Cathy Hsu, Christiana Libhart, Jaclyn Libhart, Deborah Meda, Charlie Nguyen
+
+**Course**: CST205
+
+**Date**: November 14, 2020
+
+**How to run program**: 
+- Move into the CST205FinalProject folder
+- If on Mac or a Linux machine run: 
+  ```
+  export FLASK_APP="app.py"
+  export FLASK_DEBUG="1"
+  flask run
+  ```
+- If on Windows run: 
+  ```
+  $env:FLASK_APP="app.py"
+  $env:FLASK_DEBUG="1"
+  flask run
+  ```
+
+**Github repo**: https://github.com/Turtleninisoup/CST205FinalProject
+
+**Future work**: Our project is complete but we would like to find a way to get rid of the cache that is stored in some browsers, which prevents us from dynamically generating the filtered image on each run. 
 
 ## CST 205 Design Doc
 
@@ -83,4 +108,4 @@ A user will type a recipe name in the search bar then be directed to a page with
 ## Mockup
 ![Image of Mockup](static/final_mockup.png)
 
-## Notes:  
+## Notes: Jaclyn and Cathy worked on the README  
