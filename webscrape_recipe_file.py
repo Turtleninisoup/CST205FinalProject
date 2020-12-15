@@ -154,3 +154,5 @@ website_recipe_info = [
 		"recipe_url" : "https://sugarspiceslife.com/2020/12/03/chocolate-coconut-macaroons/",
 		"tags" : "Sweet coconut cookies topped with semi-sweet chocolate. These Chocolate Coconut Macaroons are a quick, easy, and tasty treat!",
 		"image_url" : "http://images.tastespotting.com/thumbnails/1085264.jpg"
+	}
+]
